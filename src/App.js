@@ -5,12 +5,8 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      valueFirst: '',
-      valueSecond: '',
-      valueThird: '',
-      checkBoxFirst: true,
-      checkBoxSecond: true,
-      checkBoxThird: true,
+      dataValue: [0,0,0],
+      dataCheck: [true,true,true],
       total: 0
 
     }
@@ -22,28 +18,39 @@ class App extends Component {
   handleChangeInput = (event) => {
     const value = event.target.value
     const name = event.target.name
+
+    const newData= [...this.state.dataValue]
+    newData[name-1] = parseInt(value)
+
     this.setState({
       ...this.state,
-      [name]: value
+      dataValue: newData
     })
   }
 
   handleCheck = (event) => {
     const name = event.target.name
+    const {dataCheck} = this.state
+
+    var array = dataCheck
+
     switch(name) {
       case 'checkBoxFirst':
+        array[0] = !array[0]
         this.setState({
-          checkBoxFirst : !this.state.checkBoxFirst
+          data: array
         })
         break
       case 'checkBoxSecond':
+        array[1] = !array[1]
         this.setState({
-          checkBoxSecond : !this.state.checkBoxSecond
+          data: array
         })
         break
       case 'checkBoxThird':
+        array[2] = !array[2]
         this.setState({
-          checkBoxThird : !this.state.checkBoxThird
+          data: array
         })
         break
     }
@@ -51,202 +58,54 @@ class App extends Component {
   }
 
   handleSubmit = (action) => {
-    const {valueFirst, valueSecond, valueThird, checkBoxFirst, checkBoxSecond, checkBoxThird} = this.state
+    const {dataValue, dataCheck} = this.state
 
-    switch(action){
-      case '+':
-        if(!checkBoxFirst){
-          const totalValue = (parseInt(valueSecond) + parseInt(valueThird))
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond) {
-          const totalValue = (parseInt(valueFirst) + parseInt(valueThird))
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxThird) {
-          const totalValue = (parseInt(valueFirst) + parseInt(valueSecond))
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxFirst && !checkBoxSecond) {
-          const totalValue = valueThird
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxFirst && !checkBoxThird) {
-          const totalValue = valueSecond
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond && !checkBoxThird) {
-          const totalValue = valueFirst
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond && !checkBoxSecond && !checkBoxThird) {
-          const totalValue = 0
-          this.setState({
-            total : totalValue
-          })
-        } else {
-          const totalValue = (parseInt(valueFirst) + parseInt(valueSecond) + parseInt(valueThird))
-          this.setState({
-            total : totalValue
-          })
+    console.log(dataValue)
+    console.log(dataCheck)
+    var totalData = action === '+' ? 0 : action === '-' ?  dataValue[0] : action === '*'? 1 : dataValue[0] 
+    for(var i = 0; i < dataCheck.length; i++) {
+      if(dataCheck[i] === true) {
+
+        switch(action){
+          case '+':
+            totalData += dataValue[i]
+            break
+          case '-':
+            totalData -= dataValue[i]
+            break
+          case '*':
+            totalData *= dataValue[i]
+            break
+          case '/':
+            totalData /= dataValue[i]
+            break
         }
-        break
-      case '-':
-        if(!checkBoxFirst){
-          const totalValue = (valueSecond - valueThird)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond) {
-          const totalValue = (valueFirst - valueThird)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxThird) {
-          const totalValue = (valueFirst - valueSecond)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxFirst && !checkBoxSecond) {
-          const totalValue = valueThird
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxFirst && !checkBoxThird) {
-          const totalValue = valueSecond
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond && !checkBoxThird) {
-          const totalValue = valueFirst
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond && !checkBoxSecond && !checkBoxThird) {
-          const totalValue = 0
-          this.setState({
-            total : totalValue
-          })
-        } else {
-          const totalValue = (valueFirst - valueSecond - valueThird)
-          this.setState({
-            total : totalValue
-          })
-        }
-        break
-      case '*':
-        if(!checkBoxFirst){
-          const totalValue = (valueSecond * valueThird)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond) {
-          const totalValue = (valueFirst * valueThird)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxThird) {
-          const totalValue = (valueFirst * valueSecond)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxFirst && !checkBoxSecond) {
-          const totalValue = valueThird
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxFirst && !checkBoxThird) {
-          const totalValue = valueSecond
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond && !checkBoxThird) {
-          const totalValue = valueFirst
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond && !checkBoxSecond && !checkBoxThird) {
-          const totalValue = 0
-          this.setState({
-            total : totalValue
-          })
-        } else {
-          const totalValue = (valueFirst * valueSecond * valueThird)
-          this.setState({
-            total : totalValue
-          })
-        }
-        break
-      case '/':
-        if(!checkBoxFirst){
-          const totalValue = (valueSecond / valueThird)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond) {
-          const totalValue = (valueFirst / valueThird)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxThird) {
-          const totalValue = (valueFirst / valueSecond)
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxFirst && !checkBoxSecond) {
-          const totalValue = valueThird
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxFirst && !checkBoxThird) {
-          const totalValue = valueSecond
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond && !checkBoxThird) {
-          const totalValue = valueFirst
-          this.setState({
-            total : totalValue
-          })
-        } else if(!checkBoxSecond && !checkBoxSecond && !checkBoxThird) {
-          const totalValue = 0
-          this.setState({
-            total : totalValue
-          })
-        } else {
-          const totalValue = (valueFirst / valueSecond / valueThird)
-          this.setState({
-            total : totalValue
-          })
-        }
-        break
+      }
     }
+
+    this.setState({
+      total: totalData
+    })
 
   }
 
   render() {
-    const {valueFirst, valueSecond, valueThird, checkBoxFirst, checkBoxSecond, checkBoxThird, total} = this.state
+    const {valueFirst, valueSecond, valueThird, total} = this.state
     return (
       <div className="App">
         <div className="container-input">
-          <input type="text" name="valueFirst" value={valueFirst} onChange={this.handleChangeInput} />
-          <input type="checkbox" name="checkBoxFirst" className="checkbox" onChange={this.handleCheck} defaultChecked={checkBoxFirst}/>
+          <input type="text" name={1} value={valueFirst} onChange={this.handleChangeInput} />
+          <input type="checkbox" name={"checkBoxFirst"} value={valueFirst} className="checkbox" onChange={this.handleCheck} defaultChecked={true}/>
         </div>
 
         <div className="container-input">
-          <input type="text" name="valueSecond" value={valueSecond} onChange={this.handleChangeInput} />
-          <input type="checkbox" name="checkBoxSecond" className="checkbox" onChange={this.handleCheck} defaultChecked={checkBoxSecond}/>
+          <input type="text" name={2} value={valueSecond} onChange={this.handleChangeInput} />
+          <input type="checkbox" name="checkBoxSecond" value={valueSecond} className="checkbox" onChange={this.handleCheck} defaultChecked={true}/>
         </div>
 
         <div className="container-input">
-          <input type="text" name="valueThird" value={valueThird} onChange={this.handleChangeInput} />
-          <input type="checkbox" name="checkBoxThird" className="checkbox" onChange={this.handleCheck} defaultChecked={checkBoxThird}/>
+          <input type="text" name={3} value={valueThird} onChange={this.handleChangeInput} />
+          <input type="checkbox" name="checkBoxThird" className="checkbox" value={valueThird} onChange={this.handleCheck} defaultChecked={true}/>
         </div>
         <div className="container-input">
           <button onClick={()=>this.handleSubmit("+")}>+</button>
