@@ -7,6 +7,7 @@ class App extends Component {
     this.state = {
       dataValue: [0,0,0],
       dataCheck: [true,true,true],
+      dataReduce: [],
       total: 0
 
     }
@@ -58,35 +59,58 @@ class App extends Component {
   }
 
   handleSubmit = (action) => {
-    const {dataValue, dataCheck} = this.state
+    const {dataValue, dataCheck, dataReduce} = this.state
 
     console.log(dataValue)
     console.log(dataCheck)
-    var totalData = action === '+' ? 0 : action === '-' ?  dataValue[0] : action === '*'? 1 : dataValue[0] 
+    // clear data reduce
+    this.setState({
+      dataReduce: []
+    })
     for(var i = 0; i < dataCheck.length; i++) {
       if(dataCheck[i] === true) {
 
-        switch(action){
-          case '+':
-            totalData += dataValue[i]
-            break
-          case '-':
-            totalData -= dataValue[i]
-            break
-          case '*':
-            totalData *= dataValue[i]
-            break
-          case '/':
-            totalData /= dataValue[i]
-            break
-        }
+        var arrReduce = dataReduce
+        arrReduce.push(dataValue[i])
       }
     }
 
+    var totalProcess = null
+
+    switch(action){
+      case '+':
+        totalProcess = arrReduce.reduce(this.reducePlus)
+        break
+      case '-':
+        totalProcess = arrReduce.reduce(this.reduceMin)
+        break
+      case '*':
+        totalProcess = arrReduce.reduce(this.reduceKali)
+        break
+      case '/':
+        totalProcess = arrReduce.reduce(this.reduceBagi)
+        break
+    }
+
+    console.log(totalProcess)
+
     this.setState({
-      total: totalData
+      total: totalProcess
     })
 
+  }
+
+  reducePlus = (total, num) => {
+    return total + num;
+  }
+  reduceMin = (total, num) => {
+    return total - num;
+  }
+  reduceKali = (total, num) => {
+    return total * num;
+  }
+  reduceBagi = (total, num) => {
+    return total / num;
   }
 
   render() {
